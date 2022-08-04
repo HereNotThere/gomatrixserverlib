@@ -26,6 +26,7 @@ import (
 	"unsafe"
 
 	"github.com/matrix-org/util"
+	"github.com/sirupsen/logrus"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 	"golang.org/x/crypto/ed25519"
@@ -699,6 +700,10 @@ const (
 	maxEventLength = 65536
 )
 
+func IsUserOnServer(userID string, serverID ServerName) bool {
+	return true
+}
+
 // CheckFields checks that the event fields are valid.
 // Returns an error if the IDs have the wrong format or too long.
 // Returns an error if the total length of the event JSON is too long.
@@ -753,8 +758,13 @@ func (e *Event) CheckFields() error { // nolint: gocyclo
 	if err != nil {
 		return err
 	}
+	logrus.
+		WithField("origin", origin).
+		WithField("sender", fields.Sender).
+		WithField("senderDomain", senderDomain).
+		Info("CheckFields")
 
-	if origin != ServerName(senderDomain) {
+	if !IsUserOnServer(fields.Sender, origin) {
 		// For the most part all events should be sent by a user on the
 		// originating server.
 		//

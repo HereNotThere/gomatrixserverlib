@@ -426,17 +426,17 @@ func (a *allowerContext) createEventAllowed(event *Event) error {
 	if !event.StateKeyEquals("") {
 		return errorf("create event state key is not empty: %v", event.StateKey())
 	}
-	roomIDDomain, err := domainFromID(event.RoomID())
-	if err != nil {
-		return err
-	}
-	senderDomain, err := domainFromID(event.Sender())
-	if err != nil {
-		return err
-	}
-	if senderDomain != roomIDDomain {
-		return errorf("create event room ID domain does not match sender: %q != %q", roomIDDomain, senderDomain)
-	}
+	// roomIDDomain, err := domainFromID(event.RoomID())
+	// if err != nil {
+	// 	return err
+	// }
+	// senderDomain, err := domainFromID(event.Sender())
+	// if err != nil {
+	// 	return err
+	// }
+	// if senderDomain != roomIDDomain {
+	// 	return errorf("create event room ID domain does not match sender: %q != %q", roomIDDomain, senderDomain)
+	// }
 	if len(event.PrevEvents()) > 0 {
 		return errorf("create event must be the first event in the room: found %d prev_events", len(event.PrevEvents()))
 	}
